@@ -124,6 +124,9 @@ def FunctionAsymptotics.generateInputs [cmd : FixedSize α] {f : α → β}
 
 def FunctionAsymptotics.benchmark {f : α → β} [FixedSize α] (K : FunctionAsymptotics f) : Runner where
   run rounds := {
+    keys := Nat
+    values := Nat
+    keyOrd := inferInstance
     data := do
       let inputs ← FunctionAsymptotics.generateInputs K
       return ← unorderedRunnerAux inputs f rounds FixedSize.size
@@ -137,6 +140,9 @@ structure FixedInput {α : Type _} (f : α → β) where
 def FixedInput.benchmark {f : α → β} [Ord α] [ToString α] (K : FixedInput f)
     : Runner where
   run rounds := {
+    keys := α
+    values := Nat
+    keyOrd := inferInstance
     data := return ← orderedRunnerAux K.inputs f rounds
     printKeys := ToString.toString
     printVal := ToString.toString
@@ -148,6 +154,9 @@ structure Comparison {α : Type _} (f g : α → β) where
 def Comparison.benchmark {f g : α → β} [Ord α] [ToString α] (K : Comparison f g)
     : Runner where
   run rounds := {
+    keys := α
+    values := Nat × Nat
+    keyOrd := inferInstance
     data := do
       let fData ← orderedRunnerAux K.inputs f rounds
       let gData ← orderedRunnerAux K.inputs g rounds
@@ -168,9 +177,12 @@ def RandomComparison.generateInputs [cmd : FixedSize α] {f g : α → β}
       answer := answer.push (← IO.runRand $ cmd.random size)
     return answer
 
-def RandomComparison.benchmark {f g : α → β} [Ord α] [FixedSize α] (K : RandomComparison f g)
+def RandomComparison.benchmark {f g : α → β} [Ord α] [FixedSize α] [ToString α] (K : RandomComparison f g)
     : Runner where
   run rounds := {
+    keys := α
+    values := Nat × Nat
+    keyOrd := inferInstance
     data := do
       let inputs ← K.generateInputs
       let fData ← orderedRunnerAux inputs f rounds

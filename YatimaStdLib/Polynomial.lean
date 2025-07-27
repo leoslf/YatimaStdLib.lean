@@ -70,9 +70,9 @@ def makeMonic (f : Polynomial A) : Polynomial A := (1 / f.lead) * f
 def eval (f : Polynomial A) (a : A) : A :=
   let f := f.norm
   let action (i : Fin f.size) c := c * a ^ (i : Nat)
-  Array.foldr (. + .) 0 (f.mapFinIdx action)
+  Array.foldr (. + .) 0 (f.mapFinIdx λi c h => action ⟨i, h⟩ c)
 
-private def zeros (n : Nat) : Polynomial A := mkArray n 0
+private def zeros (n : Nat) : Polynomial A := Array.replicate n 0
 
 /-- The zero polynomial -/
 def zero : Polynomial A := #[0]

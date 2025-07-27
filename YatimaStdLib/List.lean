@@ -30,7 +30,7 @@ def catOptions {α : Type u} : List (Option α) → List α := mapOption id
 
 open YatimaStdLib (One)
 
-protected def fold [HMul M M M] [One M] : List M → M
+protected def fold [HMul M M M] [_root_.One M] : List M → M
   | [] => One.one
   | (x :: xs) => x * List.fold xs
 
@@ -62,10 +62,10 @@ def splitAtP [BEq α] (p : α → Bool) (l : List α) : List α × List α :=
   | [] => (l, [])
   | a::as => ⟨l.takeWhile p ++ [a], as⟩
 
-def extract (l : List α) (b : Nat) (e : Nat) : List α :=
-  if b > e then l else
-    let lₐ := l.drop b
-    lₐ.take $ e - b
+-- def extract (l : List α) (b : Nat) (e : Nat) : List α :=
+--   if b > e then l else
+--     let lₐ := l.drop b
+--     lₐ.take $ e - b
 
 partial def mergeM [Monad μ] (cmp : α → α → μ Ordering) : List α → List α → μ (List α)
   | as@(a::as'), bs@(b::bs') => do

@@ -21,7 +21,7 @@ extern_lib ffi pkg := do
   let job ← fetch <| pkg.target ``ffi.o
   buildStaticLib (pkg.nativeLibDir / name) #[job]
 
-require "leanprover-community" / "batteries" @ git "main"
+require "leanprover-community" / "batteries" @ git "v4.22.0-rc3"
 
 require "lurk-lab" / "LSpec" @ git "7f2c46b"
 
