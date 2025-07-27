@@ -23,7 +23,7 @@ extern_lib ffi pkg := do
 
 require "leanprover-community" / "batteries" @ git "v4.22.0-rc3"
 
-require "lurk-lab" / "LSpec" @ git "7f2c46b"
+require "argumentcomputer" / "LSpec" @ git "24cceb69c20fadca0fd3acabe39fa9270dfb47e6"
 
 section ImportAll
 
