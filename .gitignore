@@ -5,3 +5,6 @@ result*
 !/YatimaStdLib/MLE/cache.json
 /.vscode
 .lake/
+
+# editor
+*.swp
