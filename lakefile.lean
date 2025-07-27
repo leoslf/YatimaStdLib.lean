@@ -19,7 +19,7 @@ target ffi.o pkg : System.FilePath := do
 extern_lib ffi pkg := do
   let name := nameToStaticLib "ffi"
   let job ← fetch <| pkg.target ``ffi.o
-  buildStaticLib (pkg.nativeLibDir / name) #[job]
+  buildStaticLib (pkg.staticLibDir / name) #[job]
 
 require "leanprover-community" / "batteries" @ git "v4.22.0-rc3"
 
