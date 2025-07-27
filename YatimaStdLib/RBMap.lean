@@ -5,7 +5,7 @@ namespace Batteries.RBMap
 variable {cmp : α → α → Ordering}
 
 def enumList (xs : List α) : RBMap α Nat cmp :=
-  RBMap.ofList (xs.enum.map (fun (x, y) => (y, x))) cmp
+  RBMap.ofList (xs.zipIdx) cmp
 
 def unitMap (xs : List α) : RBMap α Unit cmp :=
   RBMap.ofList (xs.map (fun x => (x, ()))) cmp

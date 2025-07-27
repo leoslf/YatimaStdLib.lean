@@ -56,7 +56,7 @@ deriving Repr
 The chain of operations that can be used to represent a `Chainable` n in terms of the
 double-and-add algorithm
 -/
-def AddChain (α : Type _) [Chainable α] := Array α
+abbrev AddChain (α : Type _) [Chainable α] := Array α
 
 instance [Chainable α] : Inhabited (AddChain α) where
   default := #[1]
@@ -101,10 +101,10 @@ end Nat
 namespace AddChain
 
 private def findStep [Chainable α] (ch : AddChain α) (idx : Nat) : ChainStep := Id.run do
-  let val := ch.get! idx
+  let val := (ch : Array α)[idx]?
 
-  for (j, left) in ch.toList.enum do
-    for (k, right) in ch[:j + 1].toArray.toList.enum do
+  for (left, j) in ch.toList.zipIdx do
+    for (right, k) in ch[:j + 1].toArray.toList.zipIdx do
       if val == left + right then
         if j == k then
           return .double j else
@@ -117,7 +117,7 @@ def buildSteps [Chainable α] (ch : AddChain α) : Array ChainStep := Id.run do
   let mut answer := #[]
   let ch' := ch[1:].toArray
 
-  for (idx, _) in ch'.toList.enum do
+  for (_, idx) in ch'.toList.zipIdx do
     answer := answer.push $ findStep ch (idx + 1)
 
   return answer

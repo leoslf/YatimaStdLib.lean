@@ -5,8 +5,8 @@ namespace ByteArray
 
 /-- Read Nat from Little-Endian ByteArray -/
 def asLEtoNat (b : ByteArray) : Nat :=
-  b.data.toList.enum.foldl (init := 0)
-    fun acc (i, bᵢ) => acc + bᵢ.toNat.shiftLeft (i * 8)
+  b.data.toList.zipIdx.foldl (init := 0)
+    fun acc (bᵢ, i) => acc + bᵢ.toNat.shiftLeft (i * 8)
 
 /-- Read Nat from Big-Endian ByteArray -/
 def asBEtoNat (b : ByteArray) : Nat :=
@@ -84,7 +84,7 @@ Shifts the byte array left by 1 bit, preserves length (so in particular kills th
 first coefficient
 -/
 def shiftLeft (bs : ByteArray) : ByteArray := Id.run do
-  let mut answer : ByteArray := .mkEmpty bs.size
+  let mut answer : ByteArray := .emptyWithCapacity bs.size
   for idx in [:bs.size] do
     answer := answer.push <|
       (getD bs idx 0 <<< 1 : UInt8) + (getD bs (idx + 1) 0 >>> 7 : UInt8)
@@ -114,11 +114,11 @@ theorem sliceL.aux_size : (sliceL.aux acc n bs).size = acc.size + n := by
   rename_i ih
   cases n
   · simp [sliceL.aux]
-  simp [sliceL.aux, ByteArray.size, ih]
+  simp [sliceL.aux, ih]
   rw [Nat.add_assoc, Nat.add_comm 1 _]
 
 theorem slice_size : (slice bytes i n).size = n := by
-  simp [slice, sliceL, sliceL.aux, sliceL.aux_size, ByteArray.size]
+  simp [slice, sliceL, sliceL.aux_size, ByteArray.size]
 
 theorem set_size : (set arr i u (h := h)).size = arr.size := by
   simp [size, set]
