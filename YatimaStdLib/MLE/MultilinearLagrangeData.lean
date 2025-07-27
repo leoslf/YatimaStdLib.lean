@@ -1,3 +1,5 @@
+import Lake.Config.Defaults
+
 import YatimaStdLib.MultilinearPolynomial
 import YatimaStdLib.Zmod
 import YatimaStdLib.Array
@@ -60,7 +62,7 @@ def jsonToArrayMLP : Json → Except String (Array MLPData)
   | x => throw s!"Unexpected JSON for MLP array: {x.pretty}"
 
 def readCachedMLPData : IO $ Array MLPData := do
-  let outerPath : FilePath := ".lake" / "packages" / "YatimaStdLib"
+  let outerPath : FilePath := Lake.defaultPackagesDir / "YatimaStdLib"
   let cachePath :=
     if ← outerPath.isDir then outerPath / innerCachePath else innerCachePath
   match Json.parse (← IO.FS.readFile cachePath) with
