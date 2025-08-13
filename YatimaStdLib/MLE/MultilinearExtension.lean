@@ -8,8 +8,8 @@ def multilinearExtension (c : Curve) (f : Nat → Zmod c.fSize) (ν : Nat) :
     MultilinearPolynomial $ Zmod c.fSize :=
   .prune $ List.range (1 <<< ν) |>.foldl (init := default) fun acc w =>
     let pol := match c.cache.find? (ν, w) with
-      | some pol => pol
-      | none => multilinearLagrangePolynomial ν w
+      | .some pol => pol
+      | .none => multilinearLagrangePolynomial ν w
     acc + .scale pol (f w)
 
 namespace Tests
@@ -50,7 +50,7 @@ open MultilinearPolynomial in
 def buildTests (f : Nat → Zmod pallasFSize) (ν : Nat) : Bool := Id.run do
   let mut comps := #[]
   let bins := getBits ν
-  let results := buildCases f ν 
+  let results := buildCases f ν
   let mle := multilinearExtension .pallas f ν
   for t in [:2^ν] do
     let b := eval mle bins[t]! == results[t]!
@@ -60,7 +60,7 @@ def buildTests (f : Nat → Zmod pallasFSize) (ν : Nat) : Bool := Id.run do
 
 #lspec
   test "Multilinear extension works 1" (buildTests f₁ 3) $
-  test "Multilinear extension works 2" (buildTests f₂ 4) 
+  test "Multilinear extension works 2" (buildTests f₂ 4)
 
 end Tests
 

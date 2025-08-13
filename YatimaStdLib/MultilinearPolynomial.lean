@@ -75,8 +75,8 @@ Efficiency note: provide the smaller polynomial on the right.
 -/
 @[specialize] def add (mlp' : MultilinearPolynomial α) : MultilinearPolynomial α :=
   mlp'.foldl (init := mlp) fun acc b' c' => match mlp.find? b' with
-    | some c => acc.insert b' (c + c')
-    | none => acc.insert b' c'
+    | .some c => acc.insert b' (c + c')
+    | .none => acc.insert b' c'
 
 instance : HAdd (MultilinearPolynomial α) (MultilinearPolynomial α)
   (MultilinearPolynomial α) where hAdd x y := x.add y

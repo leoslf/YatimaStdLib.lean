@@ -5,7 +5,7 @@ package YatimaStdLib
 
 @[default_target]
 lean_lib YatimaStdLib where
-  precompileModules := true
+  -- precompileModules := true
 
 def ffiC := "ffi.c"
 def ffiO := "ffi.o"
@@ -21,9 +21,9 @@ extern_lib ffi pkg := do
   let job ← fetch <| pkg.target ``ffi.o
   buildStaticLib (pkg.staticLibDir / name) #[job]
 
-require "leanprover-community" / "batteries" @ git "v4.21.0"
+require "leanprover-community" / "batteries" @ git "v4.22.0-rc4"
 
-require "argumentcomputer" / "LSpec" @ git "24cceb69c20fadca0fd3acabe39fa9270dfb47e6"
+require "LSpec" from git "https://github.com/leoslf/LSpec" @ "feature/spec"
 
 section ImportAll
 
