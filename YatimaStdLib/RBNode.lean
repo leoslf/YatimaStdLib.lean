@@ -1,3 +1,4 @@
+import Lean.Data.RBMap
 import Batteries.Data.RBMap
 
 open Batteries Lean

@@ -1,4 +1,6 @@
 import Lake
+import Lean.Data.RBTree
+
 open Lake DSL
 
 package YatimaStdLib
@@ -21,24 +23,21 @@ extern_lib ffi pkg := do
   let job ← fetch <| pkg.target ``ffi.o
   buildStaticLib (pkg.staticLibDir / name) #[job]
 
-require "leanprover-community" / "batteries" @ git "v4.22.0-rc4"
+require "leanprover-community" / "batteries" @ git "v4.23.0-rc2"
 
 require "LSpec" from git "https://github.com/leoslf/LSpec" @ "feature/spec"
 
 section ImportAll
 
-open System
-open Lean (RBTree)
-
-partial def getLeanFilePaths (fp : FilePath) (acc : Array FilePath := #[]) :
-    IO $ Array FilePath := do
+partial def getLeanFilePaths (fp : System.FilePath) (acc : Array System.FilePath := #[]) :
+    IO $ Array System.FilePath := do
   if ← fp.isDir then
     (← fp.readDir).foldlM (fun acc dir => getLeanFilePaths dir.path acc) acc
   else return if fp.extension == some "lean" then acc.push fp else acc
 
 def getAllFiles : ScriptM $ List String := do
   let paths := (← getLeanFilePaths ⟨"YatimaStdLib"⟩).map toString
-  let paths : RBTree String compare := RBTree.ofList paths.toList -- ordering
+  let paths : Lean.RBTree String compare := Lean.RBTree.ofList paths.toList -- ordering
   return paths.toList
 
 def getImportsString : ScriptM String := do
